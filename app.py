@@ -3,16 +3,15 @@ import cv2
 from flask import Flask, render_template, Response
 
 app = Flask(__name__)
-
-@app.route('/')
+cap = cv2.VideoCapture(0)
+@app.route('/',methods=['GET'])
 def index():
-    """Video streaming home page."""
+    """Video streaming home page. """
     return render_template('index.html')
 
 
 def gen():
     """Video streaming generator function."""
-    cap = cv2.VideoCapture(0)
 
     # Read until video is completed
     while(cap.isOpened()):
@@ -27,7 +26,7 @@ def gen():
             break
 
 
-@app.route('/video_feed')
+@app.route('/video_feed',methods=['GET'])
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
     return Response(gen(),
