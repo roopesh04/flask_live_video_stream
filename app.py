@@ -1,8 +1,10 @@
 import time
 import cv2
 from flask import Flask, render_template, Response
+from flask_socketio import SocketIO, send
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 cap = cv2.VideoCapture(0)
 @app.route('/',methods=['GET'])
 def index():
@@ -12,7 +14,6 @@ def index():
 
 def gen():
     """Video streaming generator function."""
-
     # Read until video is completed
     while(cap.isOpened()):
       # Capture frame-by-frame
@@ -33,4 +34,4 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app)
